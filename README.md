@@ -68,4 +68,83 @@ Apply the unitary operator $U_f$ to the state $|\psi_1\rangle$. This is the **si
 
 $$|\psi_2\rangle = U_f |\psi_1\rangle = U_f \left[ \frac{1}{\sqrt{2}} \sum_{x \in \{0, 1\}} |x\rangle \right] \otimes |-\rangle$$
 
-Due to the property of the $
+Due to the property of the $U_f$ operator when the second qubit is in $|-\rangle$ (the phase kickback effect):
+
+$$U_f |x\rangle |-\rangle = (-1)^{f(x)} |x\rangle |-\rangle$$
+
+The state after the oracle becomes:
+
+$$|\psi_2\rangle = \left[ \frac{1}{\sqrt{2}} \sum_{x \in \{0, 1\}} (-1)^{f(x)} |x\rangle \right] \otimes |-\rangle$$
+
+**Key Insight:** The value of $f(x)$ has now been encoded into the **phase** of the input qubit's state. The auxiliary qubit remains in the $|-\rangle$ state and can be ignored from here on.
+
+### Step 3: Final Hadamard Transform
+Apply a final Hadamard gate only to the **first qubit** (the input qubit).
+
+$$|\psi_3\rangle = (H \otimes I) |\psi_2\rangle = H \left[ \frac{1}{\sqrt{2}} \left( (-1)^{f(0)} |0\rangle + (-1)^{f(1)} |1\rangle \right) \right] \otimes |-\rangle$$
+
+Applying $H$ to the first qubit's components: $H |0\rangle = \frac{1}{\sqrt{2}} (|0\rangle + |1\rangle)$ and $H |1\rangle = \frac{1}{\sqrt{2}} (|0\rangle - |1\rangle)$.
+
+Substituting and simplifying:
+$$|\psi_3\rangle = \frac{1}{2} \left[ (-1)^{f(0)} (|0\rangle + |1\rangle) + (-1)^{f(1)} (|0\rangle - |1\rangle) \right] \otimes |-\rangle$$
+
+Group terms by $|0\rangle$ and $|1\rangle$:
+$$|\psi_3\rangle = \frac{1}{2} \left[ \left( (-1)^{f(0)} + (-1)^{f(1)} \right) |0\rangle + \left( (-1)^{f(0)} - (-1)^{f(1)} \right) |1\rangle \right] \otimes |-\rangle$$
+
+---
+
+## 📸 Quantum Circuit Diagram
+
+Here is a visual representation of the Deutsch Algorithm's quantum circuit:
+
+http://googleusercontent.com/image_generation_content/0
+
+
+
+**Explanation of the Circuit Components:**
+
+* **`|0>` and `|1>`:** Initial states of the two qubits.
+* **`H` (Hadamard Gate):** Creates superpositions.
+* **`Quantum Oracle $U_f$`:** The black box implementing the function $f$. This is a single "query" to the function.
+* **Measurement Symbol (meter):** Measures the first qubit.
+* **Arrow with "Result (0 or 1)":** Indicates the output of the measurement.
+
+---
+
+## 🔍 The Measurement and Result
+
+The final step is to **measure the first qubit** ($|x\rangle$) to determine its final state.
+
+The coefficient of the $|0\rangle$ term, which determines the probability of measuring **0**, is:
+$$C_0 = \frac{1}{2} \left( (-1)^{f(0)} + (-1)^{f(1)} \right)$$
+
+### Case 1: Constant Function ($f(0) = f(1)$)
+
+If $f$ is **Constant**, then $f(0) = f(1)$ (either both are 0 or both are 1).
+
+* If $f(0)=f(1)=0$, then $C_0 = \frac{1}{2} (1 + 1) = 1$.
+* If $f(0)=f(1)=1$, then $C_0 = \frac{1}{2} (-1 + (-1)) = -1$.
+
+In both constant sub-cases, the probability of measuring **0** is $P(0) = |C_0|^2 = 1^2 = \mathbf{1}$.
+
+* **Conclusion:** If you measure **0** in the first qubit, the function **$f$ is Constant**.
+
+### Case 2: Balanced Function ($f(0) \neq f(1)$)
+
+If $f$ is **Balanced**, then $f(0) \neq f(1)$ (one is 0, the other is 1).
+
+* If $f(0)=0$ and $f(1)=1$, then $C_0 = \frac{1}{2} (1 + (-1)) = 0$.
+* If $f(0)=1$ and $f(1)=0$, then $C_0 = \frac{1}{2} (-1 + 1) = 0$.
+
+In both balanced sub-cases, the probability of measuring **0** is $P(0) = |C_0|^2 = \mathbf{0}$. The probability of measuring **1** is $P(1) = 1 - P(0) = \mathbf{1}$.
+
+* **Conclusion:** If you measure **1** in the first qubit, the function **$f$ is Balanced**.
+
+### Summary of Result
+
+| Measured Output of First Qubit | Function Type | Classical Queries | Quantum Queries |
+| :---: | :---: | :---: | :---: |
+| **0** | **Constant** | 2 | **1** |
+| **1** | **Balanced** | 2 | **1** |
+
+The Deutsch algorithm determines the property of the function (Constant or Balanced) with a **single evaluation** of the quantum oracle, a definitive speedup over the two evaluations required classically.
