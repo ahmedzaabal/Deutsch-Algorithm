@@ -93,24 +93,6 @@ $$|\psi_3\rangle = \frac{1}{2} \left[ \left( (-1)^{f(0)} + (-1)^{f(1)} \right) |
 
 ---
 
-## 📸 Quantum Circuit Diagram
-
-Here is a visual representation of the Deutsch Algorithm's quantum circuit:
-
-http://googleusercontent.com/image_generation_content/0
-
-
-
-**Explanation of the Circuit Components:**
-
-* **`|0>` and `|1>`:** Initial states of the two qubits.
-* **`H` (Hadamard Gate):** Creates superpositions.
-* **`Quantum Oracle $U_f$`:** The black box implementing the function $f$. This is a single "query" to the function.
-* **Measurement Symbol (meter):** Measures the first qubit.
-* **Arrow with "Result (0 or 1)":** Indicates the output of the measurement.
-
----
-
 ## 🔍 The Measurement and Result
 
 The final step is to **measure the first qubit** ($|x\rangle$) to determine its final state.
